@@ -46,11 +46,10 @@
 
   function sum() {
     console.log(arguments);
-    var sum = Array.prototype.reduce.call(arguments,
+    return Array.prototype.reduce.call(arguments,
       function (acumulated, actual) {
         return +acumulated + +actual;
     });
-    return sum;
   }
 
   /*

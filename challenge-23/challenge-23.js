@@ -1,3 +1,5 @@
+(function(wi, doc){
+  'use strict';
 /*
 Vamos desenvolver mais um projeto. A ideia é fazer uma mini-calculadora.
 As regras são:
@@ -23,3 +25,88 @@ multiplicação (x), então no input deve aparecer "1+2x".
 input;
 - Ao pressionar o botão "CE", o input deve ficar zerado.
 */
+
+var $visor = doc.querySelector('[data-js="visor"]');
+var $btnNumbers = doc.querySelectorAll('[data-js="button-number"]');
+var $btnOperations = doc.querySelectorAll('[data-js="button-operation"]');
+
+var $btnEq = doc.querySelector('[data-id="button-eq"]');
+var $btnCe = doc.querySelector('[data-id="button-ce"]');
+
+$btnCe.addEventListener('click', handleClickCE, false);
+$btnEq.addEventListener('click', handleClickEq, false);
+
+Array.prototype.forEach.call($btnNumbers, function(button) {
+  button.addEventListener('click', handleClickNumber, false);
+});
+
+Array.prototype.forEach.call($btnOperations, function(button) {
+  button.addEventListener('click', handleClickOperation, false);
+});
+
+function handleClickNumber() {
+  verifyEmptyDisplay();
+  $visor.value += this.value;
+}
+
+function handleClickCE() {
+  $visor.value = 0;
+}
+
+function handleClickEq() {
+  $visor.value = removeLastIndexIfIsOperator($visor.value);
+  var regex = /\d+[+*\/-]?/g;
+  var allValues = $visor.value.match(regex);
+  $visor.value = allValues.reduce(function(accumulated, actual){
+    var firstValue = accumulated.slice(0, -1);
+    var operator = accumulated.split('').pop();
+    var lastValue = removeLastIndexIfIsOperator(actual);
+    var lastOperator = isLastIndexAnOperation(actual) ? actual.split('').pop() : '';
+    switch (operator) {
+      case '+':
+        return (Number(firstValue) + Number(lastValue)) + lastOperator;
+        break;
+
+      case '-':
+        return (Number(firstValue) - Number(lastValue)) + lastOperator;
+        break;
+
+      case '*':
+        return (Number(firstValue) * Number(lastValue)) + lastOperator;
+        break;
+
+      case '/':
+        return (Number(firstValue) / Number(lastValue)) + lastOperator;
+        break;
+    }
+  });
+}
+
+function verifyEmptyDisplay(){
+  if($visor.value.length === 1 && $visor.value === '0')
+    $visor.value = '';
+}
+
+function handleClickOperation() {
+  $visor.value = removeLastIndexIfIsOperator($visor.value);
+  $visor.value += this.value;
+}
+
+function removeLastIndexIfIsOperator(number) {
+  if(isLastIndexAnOperation(number)){
+    return number.slice(0, -1);
+  }
+  return number;
+}
+
+function isLastIndexAnOperation(number) {
+
+  var operations = ['+', '-', '*', '/'];
+  var lastChar = number.split('').pop();
+
+  return operations.some(function(operator){
+    return operator === lastChar;
+  });
+}
+
+})(window, document);
