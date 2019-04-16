@@ -13,7 +13,7 @@ var valor = soma(10, 5) + 5;
 20
 
 // Declare uma nova variável, sem valor.
- 
+
 var newVar;
 
 /*
@@ -100,7 +100,7 @@ function identificarArgumentos(valor1, valor2, valor3){
 // Invoque a função acima utilizando todas as possibilidades (com nenhum argumento, com um, com dois e com três.)
 //Coloque um comentário de linha ao lado da função com o resultado de cada invocação.
 
-identificar(1); 	// 1
-identificar(1,2) 	// 3
-identificar(1,2,3)	// 1
-identificar()		// false
+identificarArgumentos(1); 	// 1
+identificarArgumentos(1,2) 	// 3
+identificarArgumentos(1,2,3);	// 1
+identificarArgumentos();		// false
